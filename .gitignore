@@ -5,3 +5,5 @@
 /.cpcache
 /.clj-kondo/.cache
 /.calva/output-window
+/deps-bin
+/deps-bin.jar

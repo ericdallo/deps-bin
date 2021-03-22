@@ -9,7 +9,7 @@
 ```clojure
       :bin {:replace-deps {com.github.ericdallo/deps-bin {:mvn/version ...}}
             :exec-fn deps-bin.main/bin
-            :exec-args {:bin \"myBin\"}}
+            :exec-args {:name \"myBin\"}}
 ```
   Then run:
 ```
@@ -23,6 +23,6 @@
             :exec-args {:jar MyProject.jar}}
 ```
   `:jar` can be specified as a symbol or a string.
-  `:bin` can be specified as a symbol or a string."
+  `:name` can be specified as a symbol or a string."
   [options]
   (bin/build-bin-as-main options))

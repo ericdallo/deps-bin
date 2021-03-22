@@ -1,5 +1,13 @@
 (ns deps-bin.impl.bin
-  (:require [clojure.tools.logging :as logger]))
+  (:require
+   [clj-zip-meta.core :refer [repair-zip-with-preamble-bytes]]
+   [clojure.java.io :as io]
+   [clojure.string :as str]
+   [clostache.parser :refer [render]]
+   [me.raynes.fs :as fs]))
+
+(def ^:private preamble-template
+  ":;exec java {{{jvm-opts}}} -jar $0 \"$@\"\n@echo off\r\njava {{{jvm-opts}}} -jar \"%~f0\" %*\r\ngoto :eof\r\n")
 
 (defn ^:private print-help []
   (println "library usage:")
@@ -7,18 +15,31 @@
   (println "options:")
   (println "  :help true         -- show this help (and exit)")
   (println "  :jar sym-or-str    -- specify the source name of the JAR file")
-  (println "  :name sym-or-str   -- specify the name of the generated BIN file"))
+  (println "  :name sym-or-str   -- specify the name of the generated BIN file")
+  (println "  :jvm-opts [strs]   -- optional list of JVM options to use during bin executing"))
 
-(defn ^:private build-bin
-   "Core functionality for deps-bin. Can be called from a REPL or as a library.
+(defn ^:private preamble [{:keys [jvm-opts] :as  options}]
+  (-> (render preamble-template (merge options
+                                       {:jvm-opts (str/join " " jvm-opts)}))
+      (str/replace #"\\\$" "\\$")))
+
+(defn ^:private write-bin [bin-file jar preamble]
+  (io/make-parents bin-file)
+  (with-open [bin (io/output-stream bin-file)]
+    (.write bin (.getBytes preamble))
+    (io/copy (fs/file jar) bin))
+  (fs/chmod "+x" bin-file))
+
+(defn build-bin
+  "Core functionality for deps-bin. Can be called from a REPL or as a library.
   Returns a hash map containing:
   * `:success` -- `true` or `false`
   * `:reason` -- if `:success` is `false`, this explains what failed:
     * `:help` -- help was requested
     * `:no-jar` -- the `:jar` option was missing
-    * `:copy-failure` -- one or more files could not be copied to BIN
+    * `:no-name` -- the `:name` option was missing
   Additional detail about success and failure is also logged."
-  [{:keys [help jar] :as options}]
+  [{:keys [help jar name skip-realign] :as options}]
   (cond
 
     help
@@ -27,8 +48,17 @@
     (not jar)
     {:success false :reason :no-jar}
 
+    (not name)
+    {:success false :reason :no-name}
+
     :else
-    {:success true}))
+    (let [bin-file (io/file name)]
+      (println "Creating standalone executable:" name)
+      (write-bin name jar (preamble options))
+      (when-not skip-realign
+        (println "Re-aligning zip offsets...")
+        (repair-zip-with-preamble-bytes bin-file))
+      {:success true})))
 
 (defn build-bin-as-main
   "Command-line entry point for `-X` (and legacy `-M`) that performs
@@ -42,5 +72,5 @@
         (case (:reason result)
           :help         (print-help)
           :no-jar       (print-help)
-          :copy-failure (logger/error "Completed with errors!"))
+          :no-name      (print-help))
         (System/exit 1)))))
