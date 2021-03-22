@@ -22,6 +22,12 @@ into your deps.edn, and build with:
 $ clojure -X:bin
 ```
 
+and it should generate a executable that you can run with:
+
+``` bash
+./my-bin
+```
+
 In this example, it expects that you have a jar `my-jar.jar`, you can generate it with [depstar](https://github.com/seancorfield/depstar), for example.
 
 ## Other options
