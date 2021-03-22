@@ -23,4 +23,5 @@
                              :name "deps-bin"}}
            :deploy {:replace-deps {slipset/deps-deploy {:mvn/version "0.1.5"}}
                     :exec-fn deps-deploy.deps-deploy/deploy
-                    :exec-args {:installer :remote :artifact "deps-bin.jar"}}}}
+                    :exec-args {:installer :remote
+                                :artifact "deps-bin.jar"}}}}
