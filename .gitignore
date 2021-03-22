@@ -1,0 +1,7 @@
+/.idea
+/.lsp/*.db
+/target
+/.DS_Store
+/.cpcache
+/.clj-kondo/.cache
+/.calva/output-window
