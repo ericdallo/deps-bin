@@ -1,4 +1,4 @@
-[![Clojars Project](https://img.shields.io/clojars/v/ericdallo/deps-bin.svg)](https://clojars.org/ericdallo/deps-bin)
+[![Clojars Project](https://img.shields.io/clojars/v/com.github.ericdallo/deps-bin.svg)](https://clojars.org/com.github.ericdallo/deps-bin)
 
 # deps-bin
 
@@ -10,7 +10,7 @@ This library is an deps.edn only alternative for [lein-binplus](https://github.c
 To generate a executable, simply merge:
 
 ```clojure
-{:bin {:extra-deps {ericdallo/deps-bin {:mvn/version "RELEASE"}}
+{:bin {:extra-deps {com.github.ericdallo/deps-bin {:mvn/version "RELEASE"}}
        :exec-fn deps-bin.deps-bin/bin
        :exec-args {:jar "my-jar.jar" 
                    :name "my-bin"}}}
