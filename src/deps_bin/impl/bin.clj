@@ -7,7 +7,7 @@
    [me.raynes.fs :as fs]))
 
 (def ^:private preamble-template
-  ":;exec java {{{jvm-opts}}} -jar $0 \"$@\"\n@echo off\r\njava {{{jvm-opts}}} -jar \"%~f0\" %*\r\ngoto :eof\r\n")
+  "#!/usr/bin/env bash\nexec java {{{jvm-opts}}} -jar $0 \"$@\"\n@echo off\r\njava {{{jvm-opts}}} -jar \"%~f0\" %*\r\ngoto :eof\r\n")
 
 (defn ^:private print-help []
   (println "library usage:")
@@ -70,7 +70,7 @@
       (shutdown-agents)
       (do
         (case (:reason result)
-          :help         (print-help)
-          :no-jar       (print-help)
-          :no-name      (print-help))
+          :help   (print-help)
+          :no-jar  (print-help)
+          :no-name (print-help))
         (System/exit 1)))))
