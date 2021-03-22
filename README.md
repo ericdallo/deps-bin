@@ -1,6 +1,6 @@
 [![Clojars Project](https://img.shields.io/clojars/v/ericdallo/deps-bin.svg)](https://clojars.org/ericdallo/deps-bin)
 
-# deps-gin
+# deps-bin
 
 A Clojure library that generate an embeddable jar executable from a jar.
 This library is an deps.edn only alternative for [lein-binplus](https://github.com/BrunoBonacci/lein-binplus).
