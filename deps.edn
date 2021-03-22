@@ -17,7 +17,7 @@
                  :exec-fn hf.depstar/jar
                  :exec-args {:jar "deps-bin.jar"
                              :sync-pom true
-                             :version "0.1.0"}}
+                             :version "0.1.1"}}
            :bin {:exec-fn deps-bin.deps-bin/bin
                  :exec-args {:jar "deps-bin.jar"
                              :name "deps-bin"}}
