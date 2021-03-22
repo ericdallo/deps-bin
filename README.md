@@ -28,7 +28,11 @@ and it should generate a executable that you can run with:
 ./my-bin
 ```
 
-In this example, it expects that you have a jar `my-jar.jar`, you can generate it with [depstar](https://github.com/seancorfield/depstar), for example.
+In this example, it expects that you have a jar `my-jar.jar`, you can generate it with [depstar](https://github.com/seancorfield/depstar), for example:
+
+``` bash
+$ clojure -X:jar && clojure -X:bin
+```
 
 ## Other options
 
