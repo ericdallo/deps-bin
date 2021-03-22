@@ -3,7 +3,7 @@
 # deps-bin
 
 A Clojure library that generate an embeddable jar executable from a jar.
-This library is an deps.edn only alternative for [lein-binplus](https://github.com/BrunoBonacci/lein-binplus).
+This library is a `deps.edn` only alternative for [lein-binplus](https://github.com/BrunoBonacci/lein-binplus). It will create a executable file that exec `java -jar` with the provided jvm options, so you still need `java` on your `$PATH`.
 
 ## Usage
 
@@ -36,7 +36,12 @@ $ clojure -X:jar && clojure -X:bin
 
 ## Other options
 
-- `:help` true         -- show this help (and exit)
-- `:jar` sym-or-str    -- specify the source name of the JAR file
-- `:name` sym-or-str   -- specify the name of the generated BIN file
-- `:jvm-opts` [strs]   -- optional list of JVM options to use during bin executing
+- `:help` true              -- show this help (and exit)
+- `:jar` sym-or-str         -- specify the source name of the JAR file
+- `:name` sym-or-str        -- specify the name of the generated BIN file
+- `:skip-align` sym-or-str  -- if should skip byte alignment.
+- `:jvm-opts` [strs]        -- optional list of JVM options to use during bin executing
+
+## Contribution
+
+Contributions are very welcome, please open an issue or a pull request if inspired :)
