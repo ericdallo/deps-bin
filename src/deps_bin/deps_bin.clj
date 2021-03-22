@@ -1,4 +1,4 @@
-(ns deps-bin.main
+(ns deps-bin.deps-bin
   "Entry point for clojure -X options."
   (:require [deps-bin.impl.bin :as bin]))
 
@@ -7,8 +7,8 @@
   Can be used with `clojure -X`:
   In `:aliases`:
 ```clojure
-      :bin {:replace-deps {com.github.ericdallo/deps-bin {:mvn/version ...}}
-            :exec-fn deps-bin.main/bin
+      :bin {:replace-deps {ericdallo/deps-bin {:mvn/version ...}}
+            :exec-fn deps-bin.deps-bin/bin
             :exec-args {:name \"myBin\"}}
 ```
   Then run:
@@ -18,8 +18,8 @@
   If the source JAR file is fixed, it could be added to `:exec-args` in
   `deps.edn`:
 ```clojure
-      :jar {:replace-deps {com.github.ericdallo/deps-bin {:mvn/version ...}}
-            :exec-fn deps-bin.main/bin
+      :jar {:replace-deps {ericdallo/deps-bin {:mvn/version ...}}
+            :exec-fn deps-bin.deps-bin/bin
             :exec-args {:jar MyProject.jar}}
 ```
   `:jar` can be specified as a symbol or a string.

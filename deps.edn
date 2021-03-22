@@ -16,7 +16,7 @@
            :jar {:replace-deps {com.github.seancorfield/depstar {:mvn/version "2.0.206"}}
                  :exec-fn hf.depstar/jar
                  :exec-args {:jar "deps-bin.jar"}}
-           :bin {:exec-fn deps-bin.main/bin
+           :bin {:exec-fn deps-bin.deps-bin/bin
                  :exec-args {:jar "deps-bin.jar"
                              :name "deps-bin"}}
            :deploy {:replace-deps {slipset/deps-deploy {:mvn/version "0.1.5"}}
