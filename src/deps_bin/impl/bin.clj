@@ -35,9 +35,9 @@
   Returns a hash map containing:
   * `:success` -- `true` or `false`
   * `:reason` -- if `:success` is `false`, this explains what failed:
-    * `:help` -- help was requested
-    * `:no-jar` -- the `:jar` option was missing
-    * `:no-name` -- the `:name` option was missing
+  * `:help` -- help was requested
+  * `:no-jar` -- the `:jar` option was missing
+  * `:no-name` -- the `:name` option was missing
   Additional detail about success and failure is also logged."
   [{:keys [help jar name skip-realign] :as options}]
   (cond
