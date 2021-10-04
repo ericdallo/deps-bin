@@ -39,7 +39,7 @@ $ clojure -X:jar && clojure -X:bin
 - `:help` true              -- show this help (and exit)
 - `:jar` sym-or-str         -- specify the source name of the JAR file
 - `:name` sym-or-str        -- specify the name of the generated BIN file
-- `:skip-align` sym-or-str  -- if should skip byte alignment.
+- `:skip-realign` true      -- if should skip byte alignment repair.
 - `:jvm-opts` [strs]        -- optional list of JVM options to use during bin executing
 
 ## Contribution

@@ -16,6 +16,7 @@
   (println "  :help true         -- show this help (and exit)")
   (println "  :jar sym-or-str    -- specify the source name of the JAR file")
   (println "  :name sym-or-str   -- specify the name of the generated BIN file")
+  (println "  :skip-realign true -- whether should skip byte alignment repair")
   (println "  :jvm-opts [strs]   -- optional list of JVM options to use during bin executing"))
 
 (defn ^:private preamble [{:keys [jvm-opts] :as  options}]
