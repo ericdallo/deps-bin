@@ -4,28 +4,33 @@
   <packaging>jar</packaging>
   <groupId>com.github.ericdallo</groupId>
   <artifactId>deps-bin</artifactId>
-  <version>0.1.1</version>
+  <version>0.1.2</version>
   <name>deps-bin</name>
   <dependencies>
     <dependency>
       <groupId>org.clojure</groupId>
       <artifactId>clojure</artifactId>
-      <version>1.10.3</version>
+      <version>1.11.0-rc1</version>
     </dependency>
     <dependency>
       <groupId>org.clojure</groupId>
       <artifactId>tools.logging</artifactId>
-      <version>1.1.0</version>
+      <version>1.2.4</version>
+    </dependency>
+    <dependency>
+      <groupId>de.ubercode.clostache</groupId>
+      <artifactId>clostache</artifactId>
+      <version>1.4.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
-      <version>2.14.1</version>
+      <version>2.17.2</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
-      <version>1.7.30</version>
+      <version>1.7.36</version>
     </dependency>
     <dependency>
       <groupId>clj-zip-meta</groupId>
@@ -42,11 +47,6 @@
       <groupId>me.raynes</groupId>
       <artifactId>fs</artifactId>
       <version>1.4.6</version>
-    </dependency>
-    <dependency>
-      <groupId>de.ubercode.clostache</groupId>
-      <artifactId>clostache</artifactId>
-      <version>1.4.0</version>
     </dependency>
   </dependencies>
   <build>
