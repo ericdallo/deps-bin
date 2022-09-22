@@ -6,8 +6,13 @@
    [clostache.parser :refer [render]]
    [me.raynes.fs :as fs]))
 
+(def ^:private windows?
+  (str/starts-with? (System/getProperty "os.name") "Windows"))
+
 (def ^:private preamble-template
-  "#!/usr/bin/env bash\nexec java {{{jvm-opts}}} -jar $0 \"$@\"\n@echo off\r\njava {{{jvm-opts}}} -jar \"%~f0\" %*\r\ngoto :eof\r\n")
+  (if windows?
+    "@echo off\r\njava {{{jvm-opts}}} -jar \"%~f0\" %*\r\nexit /b\r\n"
+    "#!/usr/bin/env bash\nexec java {{{jvm-opts}}} -jar $0 \"$@\"\ngoto :eof\n"))
 
 (defn ^:private print-help []
   (println "library usage:")
@@ -25,11 +30,12 @@
       (str/replace #"\\\$" "\\$")))
 
 (defn ^:private write-bin [bin-file jar preamble]
-  (io/make-parents bin-file)
-  (with-open [bin (io/output-stream bin-file)]
-    (.write bin (.getBytes preamble))
-    (io/copy (fs/file jar) bin))
-  (fs/chmod "+x" bin-file))
+  (let [bin-file (if windows? (str bin-file ".bat") bin-file)]
+    (io/make-parents bin-file)
+    (with-open [bin (io/output-stream bin-file)]
+      (.write bin (.getBytes preamble))
+      (io/copy (fs/file jar) bin))
+    (fs/chmod "+x" bin-file)))
 
 (defn build-bin
   "Core functionality for deps-bin. Can be called from a REPL or as a library.
