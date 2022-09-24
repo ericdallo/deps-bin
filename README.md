@@ -5,6 +5,8 @@
 A Clojure library that generate an embeddable jar executable from a jar.
 This library is a `deps.edn` only alternative for [lein-binplus](https://github.com/BrunoBonacci/lein-binplus). It will create a executable file that exec `java -jar` with the provided jvm options, so you still need `java` on your `$PATH`.
 
+On MS-Windows, the executable has a `.bat` extension, since technically it is a script calling java with an embedded jar file.
+
 ## Usage
 
 To generate a executable, simply merge:

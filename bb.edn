@@ -1,0 +1,19 @@
+{:paths ["src"]
+ :tasks
+ {:requires [[babashka.deps :as deps]
+             [babashka.process :as p]
+             [clojure.string :as str]]
+
+  tj {:doc "Exec bb in test/test-jar."
+      :task (let [dir "test/test-jar"
+                  bb (str \" (.get (.command (.info (java.lang.ProcessHandle/current)))) \")
+                  args (or *command-line-args* ["tasks"])]
+              (println (str "in " dir "...\n"))
+              (p/shell {:dir dir} (str/join " " (into [bb] args))))}
+
+  test {:doc "Run all tests."
+        :task
+        (-> (deps/clojure ["-M:test:runner"] {:inherit true})
+            (p/check))}}}
+
+

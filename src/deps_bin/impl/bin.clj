@@ -11,7 +11,7 @@
 
 (def ^:private preamble-template
   (if windows?
-    "@echo off\r\njava {{{jvm-opts}}} -jar \"%~f0\" %*\r\nexit /b\r\n"
+    "@echo off\r\njava {{{jvm-opts}}} -jar \"%~f0\" %*\r\nexit /b %errorlevel%\r\n"
     "#!/usr/bin/env bash\nexec java {{{jvm-opts}}} -jar $0 \"$@\"\ngoto :eof\n"))
 
 (defn ^:private print-help []
@@ -30,17 +30,17 @@
       (str/replace #"\\\$" "\\$")))
 
 (defn ^:private write-bin [bin-file jar preamble]
-  (let [bin-file (if windows? (str bin-file ".bat") bin-file)]
-    (io/make-parents bin-file)
-    (with-open [bin (io/output-stream bin-file)]
-      (.write bin (.getBytes preamble))
-      (io/copy (fs/file jar) bin))
-    (fs/chmod "+x" bin-file)))
+  (io/make-parents bin-file)
+  (with-open [bin (io/output-stream bin-file)]
+    (.write bin (.getBytes preamble))
+    (io/copy (fs/file jar) bin))
+  (fs/chmod "+x" bin-file))
 
 (defn build-bin
   "Core functionality for deps-bin. Can be called from a REPL or as a library.
   Returns a hash map containing:
   * `:success` -- `true` or `false`
+  * `:bin-path` -- On `:success`, it is the abs path to the binary.
   * `:reason` -- if `:success` is `false`, this explains what failed:
     * `:help` -- help was requested
     * `:no-jar` -- the `:jar` option was missing
@@ -59,13 +59,15 @@
     {:success false :reason :no-name}
 
     :else
-    (let [bin-file (io/file name)]
+    (let [name (if windows? (str name ".bat") name)
+          bin-file (io/file name)]
       (println "Creating standalone executable:" name)
       (write-bin name jar (preamble options))
       (when-not skip-realign
         (println "Re-aligning zip offsets...")
         (repair-zip-with-preamble-bytes bin-file))
-      {:success true})))
+      {:success true
+       :bin-path (.getCanonicalPath bin-file)})))
 
 (defn build-bin-as-main
   "Command-line entry point for `-X` (and legacy `-M`) that performs
