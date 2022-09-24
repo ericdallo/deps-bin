@@ -1,0 +1,29 @@
+{:tasks
+ {:requires [[babashka.fs :as fs]
+             [babashka.process :as p]
+             [clojure.string :as str]]
+  :init (do (def class-name "TestJar")
+            (def java-path  (str  "java/" class-name ".java"))
+            (def classes-dir "classes")
+            (def jar-path "testjar.jar"))
+  clean (do (fs/delete-tree classes-dir)
+            (fs/delete-if-exists jar-path))
+
+  compile (do (when-not (fs/exists? classes-dir) (fs/create-dir classes-dir))
+                      (p/shell "javac" "--source" 8 "--target" 8 "-d" classes-dir java-path))
+
+  jar-make (let [bb (str \" (.get (.command (.info (java.lang.ProcessHandle/current)))) \")]
+             (p/shell bb "-cp" classes-dir "uberjar" jar-path  "-m" class-name))
+
+  jar-clean-make {:doc "Clean up and make jar file from source code."
+                  :task
+                  (doseq [task '[clean compile jar-make]]
+                    (println :task task)
+                    (run task))}
+
+  jar-test (p/shell "java" "-Dxyz=9" "-jar" jar-path "xyz")
+
+  jar-clean-test
+  (doseq [task '[jar-clean-make jar-test]]
+    (println :task task)
+    (run task))}}

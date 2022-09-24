@@ -8,3 +8,9 @@
 /deps-bin
 /deps-bin.jar
 /.nrepl-port
+
+*.class
+
+# Emacs
+*~
+#*
