@@ -1,8 +1,28 @@
 {:paths ["src"]
  :tasks
  {:requires [[babashka.deps :as deps]
+             [babashka.fs :as fs]
              [babashka.process :as p]
              [clojure.string :as str]]
+
+  lint {:doc "Run linter."
+        :task (do (when-not (fs/exists? ".clj-kondo")
+                    ;; Prep linter. The `:test` alias has main as dep.
+                    (let [cp (with-out-str (deps/clojure ["-A:test" "-Spath"]))]
+                      (fs/create-dir ".clj-kondo")
+                      (p/shell "clj-kondo" "--lint" cp "--dependencies" "--copy-configs")))
+                  (doseq [dir ["src" "test"]]
+                    (println :linting dir "...")
+                    (p/shell "clj-kondo" "--lint" dir)
+                    (println)))}
+
+  lint-clean {:doc "Clean linter cache."
+              :task (fs/delete-tree ".clj-kondo")}
+
+  test {:doc "Run all tests."
+        :task
+        (-> (deps/clojure ["-M:test:runner"] {:inherit true})
+            p/check)}}}
 
   tj {:doc "Exec bb in test/test-jar."
       :task (let [dir "test/test-jar"
@@ -10,10 +30,4 @@
                   args (or *command-line-args* ["tasks"])]
               (println (str "in " dir "...\n"))
               (p/shell {:dir dir} (str/join " " (into [bb] args))))}
-
-  test {:doc "Run all tests."
-        :task
-        (-> (deps/clojure ["-M:test:runner"] {:inherit true})
-            (p/check))}}}
-
 

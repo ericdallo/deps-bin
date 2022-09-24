@@ -42,23 +42,21 @@
                               :jvm-opts ["-Dxyz=5" "-Dzyx=0"]
                               :skip-realign true})]
           (is success build)
-          (let [out (java.io.StringWriter.)
-                proc (-> (p/process [bin-path "xyz" "zyx"] {:out out :err :inherit})
-                         p/check)]
+          (let [{:keys [out]} (-> (p/process [bin-path "xyz" "zyx"] {:out :string :err :inherit})
+                                  p/check)]
             (is (= [":prop xyz :v 5" ":prop zyx :v 0"]
-                   (str/split-lines (str out))))))))
+                   (str/split-lines out)))))))
 
     (testing "return error value in case of error"
       (fs/with-temp-dir
         [temp-dir {}]
         (let [bin-path (str (fs/path temp-dir "testbin"))
               {:keys [success bin-path] :as  build} (bin/build-bin {:jar test-jar
-                                                                   :name bin-path
-                                                                   :jvm-opts ["-Dtestjar.return=7"]
-                                                                   :skip-realign true})]
+                                                                    :name bin-path
+                                                                    :jvm-opts ["-Dtestjar.return=7"]
+                                                                    :skip-realign true})]
           (is success build)
-          (let [out (java.io.StringWriter.)
-                proc @(p/process [bin-path "testjar.return"] {:out out :err :ihnerit})]
+          (let [{:keys [exit out]} @(p/process [bin-path "testjar.return"] {:out :string :err :ihnerit})]
             (is (= [":prop testjar.return :v 7"]
-                   (str/split-lines (str out))))
-            (is (= 7 (:exit proc)))))))))
+                   (str/split-lines out)))
+            (is (= 7 exit))))))))
