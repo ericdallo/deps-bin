@@ -26,7 +26,24 @@
       (is (= {:success true
               :bin-path (str (fs/canonicalize (cond-> "some-bin" (fs/windows?) (str ".bat"))))}
              (bin/build-bin {:jar "some-jar.jar"
-                             :name "some-bin"}))))))
+                             :name "some-bin"})))))
+  (testing "with :platforms provided"
+    (with-redefs [bin/write-bin (constantly nil)
+                  clj-zip-meta/repair-zip-with-preamble-bytes (constantly nil)]
+      (is (= {:success true
+              :bin-paths [(str (fs/canonicalize "some-bin.bat"))
+                          (str (fs/canonicalize "some-bin"))]}
+             (bin/build-bin {:jar "some-jar.jar"
+                             :name "some-bin"
+                             :platforms ["foo" :windows :unix :unix]})))))
+  (testing "with invalid :platforms, default to system platform"
+    (with-redefs [bin/write-bin (constantly nil)
+                  clj-zip-meta/repair-zip-with-preamble-bytes (constantly nil)]
+      (is (= {:success true
+              :bin-path (str (fs/canonicalize (cond-> "some-bin" (fs/windows?) (str ".bat"))))}
+             (bin/build-bin {:jar "some-jar.jar"
+                             :name "some-bin"
+                             :platforms [:bad-platform]}))))))
 
 (deftest binary
   (let [test-jar "test/test-jar/testjar.jar"]

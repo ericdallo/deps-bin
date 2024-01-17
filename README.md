@@ -43,6 +43,7 @@ $ clojure -X:jar && clojure -X:bin
 - `:name` sym-or-str        -- specify the name of the generated BIN file
 - `:skip-realign` true      -- if should skip byte alignment repair.
 - `:jvm-opts` [strs]        -- optional list of JVM options to use during bin executing
+- `:platforms` [kws]        -- optional list of platforms for which to emit bins, valid kws: :unix, :windows, defaults to system platform
 
 ## Contribution
 
