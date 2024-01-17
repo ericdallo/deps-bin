@@ -49,7 +49,7 @@
   (fs/chmod "+x" bin-file))
 
 (defn ^:private coerce-platforms [coll]
-  (if-some [platforms (not-empty (->> coll (keep allowed-platforms) (distinct)))]
+  (if-some [platforms (->> coll (keep allowed-platforms) distinct not-empty)]
     platforms
     [(system-platform)]))
 
@@ -71,6 +71,7 @@
   Returns a hash map containing:
   * `:success` -- `true` or `false`
   * `:bin-path` -- On `:success`, it is the abs path to the binary.
+  * `:bin-paths` -- Same as above, but when building for multiple platforms.
   * `:reason` -- if `:success` is `false`, this explains what failed:
     * `:help` -- help was requested
     * `:no-jar` -- the `:jar` option was missing
