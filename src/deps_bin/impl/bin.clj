@@ -77,7 +77,7 @@
     * `:no-jar` -- the `:jar` option was missing
     * `:no-name` -- the `:name` option was missing
   Additional detail about success and failure is also logged."
-  [{:keys [help jar name skip-realign platforms] :as options}]
+  [{:keys [help jar name platforms] :as options}]
   (cond
 
     help
