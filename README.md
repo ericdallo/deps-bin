@@ -48,3 +48,7 @@ $ clojure -X:jar && clojure -X:bin
 ## Contribution
 
 Contributions are very welcome, please open an issue or a pull request if inspired :)
+
+# Support 
+
+Consider support the work of this project [here](https://github.com/sponsors/ericdallo) ❤️
